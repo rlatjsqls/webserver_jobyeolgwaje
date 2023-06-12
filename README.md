@@ -12,5 +12,5 @@
 |:--:|:-:|:-:|
 |김선빈|조장, 쇼핑몰 데이터 수집, 자료조사|https://github.com/rlatjsqls|
 |김예원|팀원, 데이터 베이스 모델링, 웹 디자인 |https://github.com/potatowon|
-|김은혜|팀원, 웹 서버 구축, 웹 디자인|https://github.com/diadia22|
+|이은혜|팀원, 웹 서버 구축, 웹 디자인|https://github.com/diadia22|
 |허재훈|팀원, 쇼핑몰 데이터 수집, 데이터 분석|https://github.com/derekHeo|
