@@ -14,6 +14,7 @@ from tqdm import tqdm
 
 check = 0
 check_idx = 0
+p_id = 0
 # 데려올 카테고리 G07(식품)
 cat_list = ['G01','G02','G03','G04','G05','G06','G07','G08','G09','G10','G11','G12']
 for cat in cat_list:
@@ -28,17 +29,21 @@ for cat in cat_list:
 
     #item이라는 리스트 생성
     items = []
+    p_id_list = []
 
     # 아이템 설명 테이블
     for info,img,prc in zip(cs,imgs,price):
         # 각 아이템별 내용을 저장할 딕셔너리 data
         data = {
+                "product_id" : p_id,
                 "category_id" : cat, # 카테고리
                 "thumb_img" : img['src'], # 썸네일 이미지
                 "product_name": info.text, # 이름
                 "price": prc.select_one("strong > span").text, # 가격
                 "url_link" : info['href'], # 아이템 별 세부페이지 url 소스
             }
+        p_id_list.append(p_id)
+        p_id += 1
         items.append(data)
 
     # 데이터 프레임 만들기
@@ -59,13 +64,13 @@ for cat in cat_list:
     detail_img_list = []
 
     # 각 url 링크에 접근하여 리뷰 데이터 (카테고리 당 100개 아이템 x 10개 리뷰)
-    for idx, (url,name) in tqdm(enumerate(zip(item_frame['url_link'], item_frame['product_name']))):
+    for url,name, p_id in tqdm(zip(item_frame['url_link'], item_frame['product_name'], item_frame['product_id'])):
         # 리뷰 크롤링
-        resp1 = requests.post('http://item.gmarket.co.kr/Review/Text', 
+        resp1 = requests.post('http://item.gmarket.co.kr/Review/Text',
                         data='goodsCode={}&pageNo=1&totalPage=100'.format(url[41:51]),
                         headers=headers)
         soup = BeautifulSoup(resp1.text)
-        reviews = soup.select('table p.con') # 리뷰(일반 상품평) 
+        reviews = soup.select('table p.con') # 리뷰(일반 상품평)
         ids = soup.select('table dd')[::2] # 리뷰를 남긴 사용자 id
         recommends = soup.select('table td.comment-grade span.rec') # 평점
 
@@ -75,7 +80,7 @@ for cat in cat_list:
                             headers=headers)
         soup_img = BeautifulSoup(resp2.content, 'html.parser')
         i_img = soup_img.select('div#basic_detail_html img')
-        
+
         detail_item_count = 0
         for i in i_img:
             detail_item_count += 1
@@ -83,7 +88,7 @@ for cat in cat_list:
             if detail_item_count == 1: # 1번째 사진
                 detail_img = i['src']
                 break
-        
+
         detail_img_dic = {
             "detail_img" : detail_img,
             }
@@ -94,7 +99,7 @@ for cat in cat_list:
 
         for review,id,recommend in zip(reviews, ids, recommends):
             item_review_dic = {
-                # "product_idx" : check_idx *100 + idx, # 인덱스 부여
+                "product_idx" : p_id, # 아이템 id
                 "product_name" : name, # 아이템 명
                 "review_content" : review.text.strip(), # 리뷰 텍스트
                 "reviewer_id" : id.text.strip(), # 리뷰작성자 id
@@ -124,5 +129,5 @@ review_frame_chg.loc[review_frame_chg['recommend_grade'] == "추천", 'recommend
 review_frame_chg.loc[review_frame_chg['recommend_grade'] == "보통", 'recommend_grade'] = 1
 review_frame_chg.loc[review_frame_chg['recommend_grade'] == "추천안함", 'recommend_grade'] = 0
 
-#최종 리뷰데이터 
+#최종 리뷰데이터
 review_frame_chg.to_csv("review_table_gmarket.csv")
