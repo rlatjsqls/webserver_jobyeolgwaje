@@ -1,0 +1,25 @@
+<div>
+    <!-- 댓글 목록을 표시합니다. -->
+    {% for comment in comments %}
+    <p>{{ comment.text }}</p>
+    {% endfor %}
+</div>
+
+<div>
+    <!-- 페이지 링크를 표시합니다. -->
+    <span class="step-links">
+        {% if comments.has_previous %}
+        <a href="?page=1">&laquo; 처음</a>
+        <a href="?page={{ comments.previous_page_number }}">이전</a>
+        {% endif %}
+
+        <span class="current">
+            페이지 {{ comments.number }} / {{ comments.paginator.num_pages }}.
+        </span>
+
+        {% if comments.has_next %}
+        <a href="?page={{ comments.next_page_number }}">다음</a>
+        <a href="?page={{ comments.paginator.num_pages }}">마지막 &raquo;</a>
+        {% endif %}
+    </span>
+</div>
