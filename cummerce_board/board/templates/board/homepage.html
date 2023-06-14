@@ -1,0 +1,47 @@
+{% extends "./base.html" %}
+{% block main %}
+
+<div class="container">
+    <h2>Products - 둘러보기</h2>
+    <div class="row">
+
+        <div class="card mb-3" style="width: 18rem;">
+            <div class="card-body">
+                <div class="embed-responsive embed-responsive-4by3">
+                    <img class="card-img-top embed-responsive-item"
+                        src="https://cdn.pixabay.com/photo/2018/02/05/23/05/death-valley-3133502_1280.jpg" width="100"
+                        alt="이미지구역" />
+                </div>
+                <div>
+                    <h5 class="card-title">상품명</h5>
+                    <p class="card-text" style="float: right;"> 가격 </p>
+                </div>
+
+            </div>
+            <div class="card-footer">
+                <a href="#" class="btn btn-outline-dark btn-sm" style="float: right;">상세보기</a>
+            </div>
+        </div>
+        <!-- {% for good in goods %} -->
+        <div class="col-sm-6">
+            <div class="card mb-3">
+                <div class="embed-responsive embed-responsive-4by3">
+                    <img class="card-img-top embed-responsive-item"
+                        src="https://cdn.pixabay.com/photo/2018/02/05/23/05/death-valley-3133502_1280.jpg" width="100"
+                        alt="이미지구역" />
+                </div>
+                <div class="card-body">
+
+                    <h3 class="card-title h4">나는 상품이다.</h3>
+                    <a class="btn btn-outline-dark" href="#">구입하기 →</a>
+                </div>
+                <div class="card-footer">
+                    <div class="small text-muted"></div>
+                </div>
+            </div>
+        </div>
+        <!-- {% endfor %} -->
+    </div>
+</div>
+
+{% endblock %}
