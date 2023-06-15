@@ -58,7 +58,7 @@ def review_wordcloud(request, item_id):
     all_reviews = item.comment_set.all()
     texts = []
     for reviews in all_reviews:
-        texts.append(reviews.content)
+        texts.append(reviews.content)  # review 테이블에
     stopwords = {'흠', '너무'}
     keywords = summarize_with_keywords(texts, min_count=3, max_length=10,  # NLP
                                        beta=0.85, max_iter=10, stopwords=stopwords, verbose=True)
