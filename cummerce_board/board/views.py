@@ -6,6 +6,9 @@ from .forms import CommentForm
 from django.core.paginator import Paginator
 
 
+from krwordrank.word import summarize_with_keywords
+
+
 # Create your views here.
 
 
@@ -13,7 +16,7 @@ from django.core.paginator import Paginator
 #     return render(request, 'board/homepage.html')
 
 def board_item(request):
-    items = Item.objects.all()  # 모든 아이템 가져오기
+    items = Item.objects.all().order_by('id')  # 모든 아이템 가져오기
 
     # Paginator를 이용해 페이지네이션 구현
     paginator = Paginator(items, 12)  # 12개의 아이템을 한 페이지에 표시
@@ -48,6 +51,28 @@ def board_detail(request, item_id):
         'comments': comments,
     })
 
+
+def review_wordcloud(request, item_id):
+
+    item = Item.objects.get(id=item_id)
+    all_reviews = item.comment_set.all()
+    texts = []
+    for reviews in all_reviews:
+        texts.append(reviews.content)
+    stopwords = {'흠', '너무'}
+    keywords = summarize_with_keywords(texts, min_count=3, max_length=10,  # NLP
+                                       beta=0.85, max_iter=10, stopwords=stopwords, verbose=True)
+
+    wordlist = []
+    count = 0
+    for key, val in keywords.items():  # 다음 라이브러리를 위한 후처리
+        temp = {'name': key, 'value': int(val*100)}
+        wordlist.append(temp)
+        # count += 1
+        # if count >= 30:  # 출력 수 제한
+        #     break
+    print(wordlist)
+    return render(request, 'board/wordcloud.html', {'wordlist': wordlist})
 
 # def detail(request):
 #     return render(request, 'board/detail.html')
