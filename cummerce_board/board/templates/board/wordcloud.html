@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Word Cloud</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-cloud/1.2.5/d3.layout.cloud.min.js"></script>
+</head>
+
+<body>
+    <svg id="wordcloud" width="960" height="600"></svg>
+
+    <script>
+        // 단어 목록 데이터 (Django에서 전달받음)
+        var words = {{ wordlist| safe }};
+
+        // 워드클라우드 레이아웃 설정
+        var layout = d3.layout.cloud()
+            .size([960, 600])
+            .words(words.map(function (d) {
+                return { text: d.name, size: d.value };
+            }))
+            .padding(5)
+            .rotate(function () { return ~~(Math.random() * 2) * 90; })
+            .fontSize(function (d) { return d.size; })
+            .on("end", draw);
+
+        layout.start();
+
+        function draw(words) {
+            d3.select("#wordcloud").append("g")
+                .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
+                .selectAll("text")
+                .data(words)
+                .enter().append("text")
+                .style("font-size", function (d) { return d.size + "px"; })
+                .style("fill", "#000")
+                .attr("text-anchor", "middle")
+                .attr("transform", function (d) {
+                    return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+                })
+                .text(function (d) { return d.text; });
+        }
+    </script>
+</body>
+
+</html>
