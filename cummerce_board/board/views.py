@@ -63,13 +63,16 @@ def review_wordcloud(request, item_id):
     for reviews in all_reviews:
         texts.append(reviews.content)  # review 테이블에
     stopwords = {'흠', '너무'}
+    from datetime import datetime
+    start_time = datetime.now()
     keywords = summarize_with_keywords(texts, min_count=3, max_length=10,  # NLP
                                        beta=0.85, max_iter=10, stopwords=stopwords, verbose=True)
-
+    print(len(all_reviews))
+    print(f"종료시간: {datetime.now()-start_time}")
     wordlist = []
     count = 0
     for key, val in keywords.items():  # 다음 라이브러리를 위한 후처리
-        temp = {'name': key, 'value': int(val*100)}
+        temp = {'name': key, 'value': int(val*10)}
         wordlist.append(temp)
         # count += 1
         # if count >= 30:  # 출력 수 제한
