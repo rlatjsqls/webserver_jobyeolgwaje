@@ -61,7 +61,7 @@ def review_dynamic(request, item_id):
     texts = []
     for reviews in all_reviews:
         texts.append(reviews.content)  # review 테이블에
-    stopwords = {'흠', '너무'}
+    stopwords = {'흠', '너무', '좋아요', '아직'}
     from datetime import datetime
     start_time = datetime.now()
     keywords = summarize_with_keywords(texts, min_count=3, max_length=10,  # NLP
@@ -87,7 +87,7 @@ def review_wordcloud(request, item_id):
     texts = []
     for reviews in all_reviews:
         texts.append(reviews.content)  # review 테이블에
-    stopwords = {'흠', '너무'}
+    stopwords = {'흠', '너무', '좋아요'}
     from datetime import datetime
     start_time = datetime.now()
     keywords = summarize_with_keywords(texts, min_count=3, max_length=10,  # NLP
@@ -103,7 +103,7 @@ def review_wordcloud(request, item_id):
         # if count >= 30:  # 출력 수 제한
         #     break
     print(wordlist)
-    return render(request, 'board/wordcloud.html', {'wordlist': wordlist})
+    return render(request, 'board/detail.html', {'wordlist': wordlist})
 
 # def detail(request):
 #     return render(request, 'board/detail.html')
