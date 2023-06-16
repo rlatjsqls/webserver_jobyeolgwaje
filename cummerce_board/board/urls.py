@@ -11,5 +11,7 @@ urlpatterns = [
     path('category/<int:category_id>', views.board_category, name='category'),
     path('wordcloud/<int:item_id>/',
          views.review_wordcloud, name='review_wordcloud'),
+    path('api/wordcloud/<int:item_id>/',
+         views.review_dynamic, name='review_wordcloud'),
 ]
 # {% url 'board:category' category_id = 200001481 %}
