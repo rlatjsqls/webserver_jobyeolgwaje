@@ -13,6 +13,59 @@
 
     <script>
         // 단어 목록 데이터 (Django에서 전달받음)
+
+        // // 빈도수에 따라 내림차순으로 정렬
+        // words.sort(function (a, b) {
+        //     return b.value - a.value;
+        // });
+
+        // 랜덤한 색상을 생성하는 함수
+        function getRandomColor() {
+            let letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+        let layout;
+
+
+
+        function draw(words) {
+            d3.select("#wordcloud").append("g")
+                .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
+                .selectAll("text")
+                .data(words)
+                .enter().append("text")
+                .style("font-size", function (d) { return d.size + "px"; })
+                .style("fill", function (d) { return getRandomColor(); })
+                .attr("text-anchor", "middle")
+                .attr("transform", function (d) {
+                    return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+                })
+                .text(function (d) { return d.text; });
+        }
+        fetch("http://127.0.0.1:8000/board/api/wordcloud/1").then((resp) => {
+            return resp.json()
+        }).then(data => {
+            // 워드클라우드 레이아웃 설정
+            layout = d3.layout.cloud()
+                .size([960, 600])
+                .words(data.map(function (d) {
+                    return { text: d.name, size: d.value };
+                }))
+                .padding(5)
+                .rotate(function () { return ~~(Math.random() * 2) * 30; })
+                .fontSize(function (d) { return Math.sqrt(d.size) * 4; })
+                .on("end", draw);
+
+            layout.start();
+        })
+    </script>
+    <!-- 
+    <script>
+        // 단어 목록 데이터 (Django에서 전달받음)
         var words = {{ wordlist | safe }};
         // // 빈도수에 따라 내림차순으로 정렬
         // words.sort(function (a, b) {
@@ -49,14 +102,14 @@
                 .data(words)
                 .enter().append("text")
                 .style("font-size", function (d) { return d.size + "px"; })
-                .style("fill", function (d) { return getRandomColor(); })ㄴ
-                    .attr("text-anchor", "middle")
-                    .attr("transform", function (d) {
-                        return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-                    })
-                    .text(function (d) { return d.text; });
+                .style("fill", function (d) { return getRandomColor(); })
+                .attr("text-anchor", "middle")
+                .attr("transform", function (d) {
+                    return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+                })
+                .text(function (d) { return d.text; });
         }
-    </script>
+    </script> -->
 </body>
 
 </html>
