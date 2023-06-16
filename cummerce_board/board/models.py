@@ -25,6 +25,7 @@ class Comment(models.Model):
 
 class Item(models.Model):
     id = models.AutoField(primary_key=True)  # 아이템에 대한 pk
+    category_id = models.IntegerField('카테고리ID', default=0)
     product_name = models.TextField('상품명')
     thumb_img = models.TextField('모델이미지')
     price = models.CharField('가격', max_length=225)

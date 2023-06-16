@@ -17,12 +17,10 @@ from krwordrank.word import summarize_with_keywords
 
 def board_item(request):
     items = Item.objects.all().order_by('id')  # 모든 아이템 가져오기
-
-    # Paginator를 이용해 페이지네이션 구현
-    paginator = Paginator(items, 12)  # 12개의 아이템을 한 페이지에 표시
-    page = request.GET.get('page')  # 현재 페이지 번호를 가져옴
-    items_on_page = paginator.get_page(page)  # 현재 페이지의 아이템을 가져옴
-
+    # # Paginator를 이용해 페이지네이션 구현
+    # paginator = Paginator(items, 12)  # 12개의 아이템을 한 페이지에 표시
+    # page = request.GET.get('page')  # 현재 페이지 번호를 가져옴
+    # items_on_page = paginator.get_page(page)  # 현재 페이지의 아이템을 가져옴
     # 템플릿에 데이터를 전달하며 렌더링
     return render(request, 'board/homepage.html', {'items': items})
 
@@ -50,6 +48,11 @@ def board_detail(request, item_id):
         'form': form,
         'comments': comments,
     })
+
+
+def board_category(request, category_id):
+    items = Item.objects.filter(category_id=category_id)
+    return render(request, 'board/category.html', {'items': items})
 
 
 def review_wordcloud(request, item_id):

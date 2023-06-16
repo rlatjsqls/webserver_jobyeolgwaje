@@ -1,0 +1,33 @@
+{% extends "./base.html" %}
+{% block main %}
+
+<div class="container">
+    <h2>Products - 둘러보기</h2>
+    <div class="row">
+        {% for item in items %}
+
+        <div class="card mb-4 " style="width: 20rem;">
+
+            <div class="embed-responsive embed-responsive-4by3">
+                <img class="card-img-top embed-responsive-item" src="{{ item.thumb_img }}" width="70"
+                    alt="{{ item.id }}" />
+            </div>
+            <div class="card-body">
+                <div>
+                    <h5 class="card-title">{{ item.product_name }}</h5>
+                    <p class="card-text" style="float: right;">{{ item.price }}</p>
+                </div>
+
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'board:detail' item_id=item.id %}" class="btn btn-outline-dark btn-sm"
+                    style="float: right;">상세보기</a>
+            </div>
+        </div>
+
+        {% endfor %}
+
+    </div>
+</div>
+
+{% endblock %}
