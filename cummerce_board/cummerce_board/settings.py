@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'cummerce_board.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'cummerce_django',
+        'NAME': 'cummerce_project',
         'USER': 'root',
         'PASSWORD': 'admin123',
         'HOST': '127.0.0.1',

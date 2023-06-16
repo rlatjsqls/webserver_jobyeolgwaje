@@ -10,13 +10,15 @@
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav me-auto mb-2 mb-md-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{% url 'board:board_item' %}">Home</a>
+                        <a class="nav-link active" aria-current="page" href="{% url 'board:board_item' %}">전체보기</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">추천 보기</a>
+
+                        <a class="nav-link" href="{% url 'board:category' category_id=200000313 %}">헤어 케어</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link disabled">Disabled</a>
+
+                        <a class="nav-link" href="{% url 'board:category' category_id=200001481 %}">헤어 스타일링</a>
                     </li>
                 </ul>
                 <form class="d-flex">
