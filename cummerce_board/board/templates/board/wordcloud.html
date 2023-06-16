@@ -13,7 +13,21 @@
 
     <script>
         // 단어 목록 데이터 (Django에서 전달받음)
-        var words = {{ wordlist| safe }};
+        var words = {{ wordlist | safe }};
+        // // 빈도수에 따라 내림차순으로 정렬
+        // words.sort(function (a, b) {
+        //     return b.value - a.value;
+        // });
+
+        // 랜덤한 색상을 생성하는 함수
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
 
         // 워드클라우드 레이아웃 설정
         var layout = d3.layout.cloud()
@@ -22,8 +36,8 @@
                 return { text: d.name, size: d.value };
             }))
             .padding(5)
-            .rotate(function () { return ~~(Math.random() * 2) * 90; })
-            .fontSize(function (d) { return d.size; })
+            .rotate(function () { return ~~(Math.random() * 2) * 30; })
+            .fontSize(function (d) { return Math.sqrt(d.size) * 4; })
             .on("end", draw);
 
         layout.start();
@@ -35,12 +49,12 @@
                 .data(words)
                 .enter().append("text")
                 .style("font-size", function (d) { return d.size + "px"; })
-                .style("fill", "#000")
-                .attr("text-anchor", "middle")
-                .attr("transform", function (d) {
-                    return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-                })
-                .text(function (d) { return d.text; });
+                .style("fill", function (d) { return getRandomColor(); })ㄴ
+                    .attr("text-anchor", "middle")
+                    .attr("transform", function (d) {
+                        return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+                    })
+                    .text(function (d) { return d.text; });
         }
     </script>
 </body>
