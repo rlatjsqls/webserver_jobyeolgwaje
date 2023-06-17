@@ -15,3 +15,4 @@ urlpatterns = [
          views.review_dynamic, name='review_wordcloud'),
 ]
 # {% url 'board:category' category_id = 200001481 %}
+# 찾기
